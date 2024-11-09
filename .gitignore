@@ -1,0 +1,15 @@
+# Ignorar archivos de audio generados
+audio/*.mp3
+
+# Archivos de configuración específicos del entorno de desarrollo
+__pycache__/
+*.pyc
+
+# Archivos de entorno virtual (si estás usando un entorno virtual en la carpeta del proyecto)
+venv/
+.env
+
+# Configuraciones de sistema
+.DS_Store
+Thumbs.db
+

@@ -1,0 +1,8 @@
+newspaper3k
+nltk
+gtts
+lxml==4.9.3
+
+
+
+# pip install -r requirements.txt
