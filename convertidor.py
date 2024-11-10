@@ -5,6 +5,8 @@ import nltk
 import re
 import config
 from pydub import AudioSegment
+from tqdm import tqdm
+import time
 
 # Descargar los datos de NLTK necesarios para procesamiento de texto
 nltk.download('punkt')
@@ -81,64 +83,91 @@ def extraer_texto(url):
 def texto_a_voz(texto, idioma=config.IDIOMA_VOZ, archivo=config.RUTA_ARCHIVO_AUDIO):
     """
     Convierte el texto a un archivo de audio en formato mp3 usando Google Text-to-Speech
-    y ajusta la velocidad y el tono.
-    
-    Args:
-        texto (str): El contenido de texto a convertir en voz.
-        idioma (str): El código del idioma para la conversión.
-        archivo (str): La ruta donde se guardará el archivo de audio mp3.
+    y ajusta la velocidad y el tono, mostrando una barra de progreso.
     """
     try:
-        # Generar el audio con gTTS
+        # Iniciar barra de progreso
+        print("\nIniciando proceso de conversión...")
+        progress_bar = tqdm(total=5, desc="Progreso", unit="paso")
+
+        # Paso 1: Generar el audio con gTTS
+        progress_bar.set_description("Generando audio base")
         archivo_temporal = "temp_audio.mp3"
         tts = gTTS(text=texto, lang=idioma)
         tts.save(archivo_temporal)
+        progress_bar.update(1)
         
-        # Cargar el audio con pydub
+        # Paso 2: Cargar el audio
+        progress_bar.set_description("Cargando audio")
         audio = AudioSegment.from_mp3(archivo_temporal)
+        progress_bar.update(1)
         
-        # Ajustar la velocidad (1.5x)
+        # Paso 3: Ajustar la velocidad
+        progress_bar.set_description("Ajustando velocidad")
         audio_modificado = audio._spawn(audio.raw_data, overrides={
             "frame_rate": int(audio.frame_rate * 1.5)
         }).set_frame_rate(audio.frame_rate)
+        progress_bar.update(1)
         
-        # Bajar el tono (pitch) para una voz más adulta
-        # Los valores negativos bajan el tono, positivos lo suben
-        # -2 suele dar un buen resultado para voz adulta
-        octaves = -0.6  # Prueba con valores entre -1 y -3
+        # Paso 4: Ajustar el tono
+        progress_bar.set_description("Optimizando tono de voz")
+        octaves = -0.6
         new_sample_rate = int(audio_modificado.frame_rate * (2.0 ** octaves))
-        
-        # Aplicar el cambio de tono manteniendo la duración
         audio_modificado = audio_modificado._spawn(audio_modificado.raw_data, overrides={
             "frame_rate": new_sample_rate
         })
         audio_modificado = audio_modificado.set_frame_rate(audio.frame_rate)
+        progress_bar.update(1)
         
-        # Guardar el resultado final
+        # Paso 5: Guardar el resultado final
+        progress_bar.set_description("Guardando archivo final")
         audio_modificado.export(archivo, format="mp3")
-        print(f'Archivo de audio guardado como {archivo}')
+        progress_bar.update(1)
+        
+        # Cerrar la barra de progreso
+        progress_bar.close()
+        
+        print(f'\n✅ Archivo de audio guardado exitosamente como {archivo}')
         
         # Eliminar el archivo temporal
         import os
         os.remove(archivo_temporal)
         
     except Exception as e:
-        print(f"Error al convertir texto a voz: {e}")
+        print(f"\n❌ Error al convertir texto a voz: {e}")
 
 def main():
     """
     Flujo principal del programa: solicita una URL, extrae el texto del artículo,
-    lo limpia y lo convierte en un archivo de audio en formato mp3.
+    y lo convierte en un archivo de audio en formato mp3.
     """
-    url = input("Introduce la URL del artículo: ")
-    texto = extraer_texto(url)
+    url = input("🌐 Introduce la URL del artículo: ")
     
-    if texto:
-        print("Texto extraído y limpiado con éxito. Iniciando la conversión a audio...")
-        texto_a_voz(texto)
-        print("Conversión completada.")
+    # Barra de progreso para la extracción
+    print("\nIniciando extracción del artículo...")
+    with tqdm(total=3, desc="Extracción", unit="paso") as pbar:
+        # Paso 1: Descarga
+        pbar.set_description("Descargando contenido")
+        articulo = Article(url)
+        articulo.download()
+        pbar.update(1)
+        
+        # Paso 2: Análisis
+        pbar.set_description("Analizando contenido")
+        articulo.parse()
+        pbar.update(1)
+        
+        # Paso 3: Limpieza
+        pbar.set_description("Limpiando texto")
+        texto_limpio = limpiar_texto(articulo.text)
+        pbar.update(1)
+    
+    if texto_limpio:
+        print("\n✨ Texto extraído y limpiado con éxito.")
+        texto_a_voz(texto_limpio)
+        print("\n🎉 ¡Proceso completado con éxito!")
     else:
-        print("No se pudo extraer texto de la URL. Verifique la URL e intente nuevamente.")
+        print("\n❌ No se pudo extraer texto de la URL. Verifique la URL e intente nuevamente.")
 
 if __name__ == "__main__":
     main()

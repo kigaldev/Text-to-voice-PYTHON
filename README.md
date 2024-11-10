@@ -6,7 +6,7 @@
 
 ## 🚀 Descripción
 
-Convierte artículos web en archivos de audio MP3 de forma instantánea. Este proyecto transforma el contenido de texto de cualquier URL en un archivo de audio reproducible, permitiéndote consumir contenido mientras realizas otras actividades. El programa incluye limpieza inteligente de texto y optimización de voz para una experiencia de escucha natural y eficiente.
+Convierte artículos web en archivos de audio MP3 de forma instantánea. Este proyecto transforma el contenido de texto de cualquier URL en un archivo de audio reproducible, permitiéndote consumir contenido mientras realizas otras actividades. El programa incluye limpieza inteligente de texto, optimización de voz y seguimiento visual del progreso para una experiencia de usuario completa.
 
 ### ⚡ Desarrollo Rápido con IA
 Este proyecto fue desarrollado en menos de 1 hora utilizando:
@@ -25,6 +25,7 @@ La combinación de estas herramientas de IA permitió un desarrollo ágil y efic
 | 🧹 Limpieza Avanzada | Elimina automáticamente enlaces, pies de foto y contenido irrelevante |
 | ⚡ Audio Optimizado | Velocidad de reproducción aumentada a 1.5x para una escucha más eficiente |
 | 🎤 Voz Natural | Tono de voz ajustado para una experiencia de escucha más agradable |
+| 📊 Seguimiento Visual | Barras de progreso en tiempo real para cada etapa del proceso |
 
 ## 🛠️ Tecnologías
 
@@ -32,6 +33,7 @@ La combinación de estas herramientas de IA permitió un desarrollo ágil y efic
 - **🔤 NLTK**: Procesamiento avanzado de lenguaje natural
 - **🔊 gTTS**: Conversión de texto a voz utilizando la API de Google
 - **🎵 pydub**: Manipulación y optimización de audio
+- **📊 tqdm**: Visualización del progreso en tiempo real
 - **🧰 FFmpeg**: Procesamiento de audio (dependencia externa)
 
 ## 📦 Instalación
@@ -51,6 +53,7 @@ La combinación de estas herramientas de IA permitió un desarrollo ágil y efic
   Set-ExecutionPolicy Bypass -Scope Process -Force
   [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
   iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
 
 ## 📦 Instalación
 
@@ -89,7 +92,6 @@ Ingresa la URL del artículo cuando se te solicite
 ¡Espera a que se genere tu archivo de audio optimizado!
 
 🔍 Características de Limpieza
-
 El programa automáticamente:
 
 Elimina URLs y enlaces
@@ -100,13 +102,35 @@ Optimiza el texto para una mejor experiencia de audio
 
 ⚙️ Optimización de Audio
 
-Velocidad de reproducción aumentada a 1.5x
-Mantiene la calidad del tono de voz
-Formato MP3 optimizado
+Velocidad: Reproducción aumentada a 1.5x para una escucha más eficiente
+Tono de Voz: Ajustado a una frecuencia natural (octaves = -0.6) para una voz más agradable
+Calidad: Mantiene la claridad y naturalidad del habla
+Formato: MP3 optimizado para un balance entre calidad y tamaño
+
+📊 Seguimiento de Progreso
+El programa muestra barras de progreso en tiempo real para:
+
+Proceso de Extracción (3 pasos):
+
+Descarga del contenido
+Análisis del artículo
+Limpieza del texto
+
+
+Proceso de Conversión (5 pasos):
+
+Generación del audio base
+Carga del audio
+Ajuste de velocidad
+Optimización del tono
+Guardado final
+
+
 
 📝 Nota Importante
 Asegúrate de tener FFmpeg instalado correctamente en tu sistema antes de ejecutar el programa. Puedes verificar la instalación ejecutando:
-bashCopyffmpeg -version
+
+ffmpeg -version
 
 🤝 Contribuciones
 Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir los cambios que te gustaría realizar.

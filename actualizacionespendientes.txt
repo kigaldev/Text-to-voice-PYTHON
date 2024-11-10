@@ -1,0 +1,5 @@
+Añadir más opciones de idiomas
+Implementar diferentes velocidades de reproducción
+Añadir un sistema de guardado de configuraciones preferidas
+Crear una interfaz gráfica
+Añadir soporte para procesamiento por lotes de URLs

@@ -4,6 +4,7 @@ nltk==3.8.1
 gTTS==2.5.1
 pydub==0.25.1
 lxml==4.9.3
+tqdm==4.66.1
 
 # Dependencias secundarias pero necesarias
 beautifulsoup4>=4.9.3
